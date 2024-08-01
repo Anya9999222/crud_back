@@ -34,7 +34,17 @@ app.use(async ctx => {
 
 	switch (method) {
 		case 'allTickets':
-			ctx.response.body = tickets;
+			const resp = []
+			
+			tickets.forEach(i => {
+				resp.push({
+					id: i.id,
+					name: i.name,
+        			status: i.status,
+        			created: i.created
+				})
+			})
+			ctx.response.body = resp;
 			return;
 		case 'ticketById':
 			const res = tickets.filter(i => i.id === req.id);
@@ -56,7 +66,7 @@ app.use(async ctx => {
 			const {
 				id, name, description, status, created
 			} = ctx.request.body;
-			
+
 			const ticketToEdit = tickets.find(i => i.id === req.id);
 			ticketToEdit.id = req.id;
 			ticketToEdit.name = name;
